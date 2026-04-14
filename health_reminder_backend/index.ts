@@ -14,7 +14,10 @@ const MONGODB_URI =
 mongoose
   .connect(MONGODB_URI)
   .then(() => console.log("✅ Connected to MongoDB"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
+  .catch((err) => {
+    console.error("❌ MongoDB connection error:", err.message);
+    process.exit(1);
+  });
 
 // Models
 const reminderSchema = new mongoose.Schema({
@@ -134,9 +137,22 @@ app.delete("/api/inventory/:id", async (c) => {
 
 const PORT = process.env.PORT || 3000;
 
+console.log(
+  `🔌 Connecting to MongoDB... (URI set: ${!!process.env.MONGODB_URI})`,
+);
+
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => {
+    console.log("✅ Connected to MongoDB");
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB connection error:", err.message);
+    process.exit(1);
+  });
+
 export default {
   port: PORT,
   fetch: app.fetch,
 };
-
-console.log(`🚀 Server running on http://localhost:${PORT}`);
