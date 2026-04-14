@@ -8,8 +8,7 @@ const app = new Hono();
 app.use("/*", cors());
 
 // MongoDB Connection
-const MONGODB_URI =
-  process.env.MONGODB_URI || "mongodb://localhost:27017/health_reminder";
+const MONGODB_URI = process.env.MONGODB_URI!;
 
 mongoose
   .connect(MONGODB_URI)
